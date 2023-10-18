@@ -1,10 +1,12 @@
 import math
+import re
 import random
 import smtplib
 from twilio.rest import Client
 account_sid = 'ACc90b01dc3b9e5727a207731cb591b9a7'
 auth_token = '4e9aaa48cbdd9aac7dc4a1f7a6c09c99'
 twilio_number = '+15856394364'
+
 # Generate OTP
 def GenerateOTP():
     digits = "0123456789"
@@ -21,22 +23,22 @@ def GenerateOTP():
 
 # validate the mobile number
 def ValidateMobile(PhoneNo):
-     if len(PhoneNo) != 10:
-       
+   regex = r'(0|91)?[6-9][0-9]{9}'
+   if(re.search(regex, PhoneNo)):
+        return True
+   else:
         return False
-     else:
-         return True 
 
 
 
 
 #validate the emailid
 def ValidateEmailID(Email):
-    if "@gmail.com" not in Email:
-    
-        return False
-    else:
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if(re.search(regex, Email)):
         return True
+    else:
+        return False
 
 
 
@@ -64,23 +66,24 @@ def sendOTPOverEmail(Email2, OTP):
     server.sendmail('naikatharva111@gmail.com',
                     Email2, message)
     server.quit()
-
-
-
-
+ 
 
 PhoneNo = input("Enter the number:")
 Email = input("Enter the Email:")
+
 if(ValidateMobile(PhoneNo)):
     PhoneNo2 = PhoneNo
 else:
     PhoneNo2 = input("enter a valid mobile number")    
 
 
+
+
 if(ValidateEmailID(Email)):
     Email2 = Email
 else:
     Email2 = input("enter the valid email")
+     
 
 
 
@@ -90,8 +93,3 @@ OTP = GenerateOTP()
 sendOTPOverMobile(PhoneNo2, OTP)
 
 sendOTPOverEmail(Email2, OTP)
-
-
-
-
-
